@@ -84,6 +84,42 @@ body{
     margin-right:10px ;
 }
 
+.book-collection{
+    padding-top: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: center;
+    gap: 6rem;
+}
+
+.book-card{
+    padding: 40px 40px 40px 40px;
+    background-color: rgba(0, 34, 51, 1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+}
+
+.book-info > p{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.book-info .book-cover{
+    object-fit: cover;
+    width: 150px;
+    aspect-ratio: 2 / 3;
+    
+    border-radius: 12px;
+}
+
+
+
+
+
 
 
 

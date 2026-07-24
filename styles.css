@@ -1,0 +1,90 @@
+@font-face {
+    font-family: 'Roboto';
+    src: url('fonts/Roboto-Regular.woff2') format('woff2'),
+        url('fonts/Roboto-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* @link https://utopia.fyi/type/calculator?c=320,16,1.125,1440,18,1.25,5,3,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
+:root{
+    --step--3: clamp(0.576rem, 0.7384rem + -0.1805vw, 0.7023rem);
+    --step--2: clamp(0.72rem, 0.8102rem + -0.1002vw, 0.7901rem);
+    --step--1: clamp(0.8889rem, 0.8857rem + 0.0159vw, 0.9rem);
+    --step-0: clamp(1rem, 0.9643rem + 0.1786vw, 1.125rem);
+    --step-1: clamp(1.125rem, 1.0446rem + 0.4018vw, 1.4063rem);
+    --step-2: clamp(1.2656rem, 1.125rem + 0.7031vw, 1.7578rem);
+    --step-3: clamp(1.4238rem, 1.2028rem + 1.1049vw, 2.1973rem);
+    --step-4: clamp(1.6018rem, 1.2747rem + 1.6354vw, 2.7466rem);
+    --step-5: clamp(1.802rem, 1.336rem + 2.3303vw, 3.4332rem);
+    
+    --texts: #F8F9FA;
+}
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+
+body{
+    font-family: "Roboto", sans-serif;
+    color: var(--texts);
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+
+.image-holder::before{
+    content: "";
+    position: absolute;
+    background: url("assets/wave-haikei.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    
+}
+
+.main-container{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 10%;
+    display: flex;
+    justify-content: center;
+}
+
+.library-container{
+    padding-top: 1.5rem;
+    text-align: center;
+    background-color: rgba(0, 34, 51, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    width: 70%;
+    height: 70%;
+}
+
+.library-container h1{
+    font-size: var(--step-3);
+}
+
+.library-container h2{
+    margin-top: 2rem;
+}
+
+.library-container .icon{
+    width: 20px;
+    margin-right:10px ;
+}
+
+
+
+
+

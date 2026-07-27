@@ -63,9 +63,35 @@
                 </div>
             </div>
 
-            <button class="add-book">Add new Book!</button>
+            <button class="add-book glass-button" command="show-modal" commandfor="book-dialog">Add new Book!</button>
+
+            <dialog id="book-dialog">
+                <form>
+                    <fieldset>
+                        <legend>Add a New Book!</legend>
+                        <div class="entry-container">
+                            <div class="form-entry">
+                                <label for="book-title">Title:</label>
+                                <input type="text" id="book-title" name="bookTitle" required>
+                            </div>
+                            <div class="form-entry">
+                                <label for="book-author">Author:</label>
+                                <input type="text" name="bookAuthor" id="book-author" required>
+                            </div>
+                            <div class="form-entry">
+                                <label for="book-pages">Pages:</label>
+                                <input type="tel" name="bookPages" id="book-pages" required>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <button class="glass-button" type="submit">Add New!</button>
+                </form>
+                <button class="modal-close glass-button" commandfor="book-dialog" command="close">Close</button>
+            </dialog>
         </div>
     </div>
+
+    <script src="js/libraryAdmin.js" defer></script>
     
 </body>
 </html>

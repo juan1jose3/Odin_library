@@ -36,6 +36,7 @@ body{
     color: var(--texts);
     width: 100vw;
     min-height: 100vh;
+    overflow-x: hidden;
 }
 
 .image-holder{
@@ -63,10 +64,11 @@ body{
     top: 10%;
     display: flex;
     justify-content: center;
+    
 }
 
 .library-container{
-    padding-top: 1.5rem;
+    padding: 1.5rem 1.5rem 1.5rem 1.5rem;
     text-align: center;
     background-color: rgba(0, 34, 51, 0.6);
     backdrop-filter: blur(12px);
@@ -75,6 +77,7 @@ body{
     border: var(--border);
     border-radius: 12px;
     min-width: 70%;
+    max-width: 70%;
     height: fit-content;
     padding-bottom: 2rem;
 }
@@ -170,7 +173,8 @@ dialog#book-dialog{
     width: 55%;
 }
 
-dialog#book-dialog input{
+dialog#book-dialog input[type="text"],
+dialog#book-dialog input[type="tel"]{
     color: #FFFFFF;
     background-color:rgba(255, 255, 255, 0.1);
     border: none;
@@ -184,6 +188,18 @@ dialog#book-dialog input{
 dialog#book-dialog input:hover,
 dialog#book-dialog input:focus{
     border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+dialog input[type="radio"]{
+    appearance: none;
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    border: var(--border);
+}
+
+dialog input[type="radio"]:checked{
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 
@@ -205,6 +221,7 @@ label{
     padding-bottom: 1rem;
 }
 
+
 .entry-container{
     display: flex;
     flex-direction: column;
@@ -215,6 +232,62 @@ label{
 
 fieldset{
     border: none;
+}
+
+.hidden-id{
+    display: none;
+}
+
+.button-section{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+
+.read-button,
+.not-read-button,
+.remove-button{
+    color:#FFFFFF;
+    background-color: transparent;
+    border: none;
+    height: 40px;
+    min-width: 100%;
+    border-radius: 12px;
+    text-align: center;
+    text-transform: capitalize;
+    font-weight: bold;  
+    cursor: pointer;
+    transition: 0.5s; 
+}
+
+.read-button{
+    border:1px solid #059669;
+    
+}
+.read-button:hover{
+    background-color: rgba(6, 95, 70, 0.2);
+}
+
+.not-read-button{
+    background-color: transparent;
+    color: #94a3b8;
+    border: 1px solid #334155;
+}
+
+.not-read-button:hover{
+    background-color: rgba(51, 65, 85,0.5);
+}
+
+.remove-button{
+    background-color: transparent;
+    color: #fca5a5;
+    border: 1px solid #7f1d1d;
+}
+
+.remove-button:hover{
+    background-color: rgba(127, 29, 29,0.3);
 }
 
 

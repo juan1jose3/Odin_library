@@ -36,6 +36,18 @@ function addBookToLibrary(title, author, pages, readStatus) {
   
 }
 
+
+function updateReadingStatus(status, bookId) {
+  for (let book of myLibrary) {
+    if (book.id === bookId) {
+      book.readStatus = status;
+      console.log("Status Updated In Library");
+    }
+  }
+
+  console.log(myLibrary);
+}
+
 function displayLibrary(){
 
   let lastItem = myLibrary[myLibrary.length - 1];
@@ -55,7 +67,7 @@ function displayLibrary(){
                 <p>Pages: ${lastItem.pages}</p>
                   
                 <div class="button-section"> 
-                    <button class="${lastItem.readStatus}-button">${lastItem.readStatus}</button>
+                    <button class="${lastItem.readStatus}-button" bookId="${lastItem.id}">${lastItem.readStatus}</button>
                     <button class="remove-button" bookId="${lastItem.id}">Remove</button>
                 </div>
             </div>
@@ -71,25 +83,38 @@ function additionalOptions() {
   bookCollection.addEventListener("click", (event) => {
     let button = event.target.closest("button");
     if (!button) return;
-  
+
+    let status;
+    let bookId = button.getAttribute("bookID");
+    
+    
     if (button.className === "remove-button") {
-      let bookId = button.getAttribute("bookID");
+    
       let card = button.closest(".book-card");
       card.remove();
-    
       removeBookFromLibrary(bookId);
+      
     } else if (button.className === "not-read-button") {
+      
       button.classList.remove("not-read-button");
       button.textContent = "Read";
       button.classList.add("read-button");
     } else {
+      
       button.classList.remove("read-button");
       button.textContent = "Not-Read";
       button.classList.add("not-read-button");
     }
+
+    
+
+    status = button.textContent.toLowerCase();
+    console.log(bookId);
+
+    updateReadingStatus(status, bookId);
     
   });
-}
+}removeBookFromLibrary
 
 
 function fetchFormData() {

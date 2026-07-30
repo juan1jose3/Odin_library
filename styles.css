@@ -234,8 +234,30 @@ fieldset{
     border: none;
 }
 
-.hidden-id{
-    display: none;
+.drag-drop-container{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+   
+}
+
+.drop-box{
+    width: 200px;
+    height: 200px;
+    border: 2px dashed #9a9a9a;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.drop-box img{
+    width: 100%;
+    height: 100%;
+    object-fit:contain;
+    object-position: center;
 }
 
 .button-section{

@@ -1,4 +1,5 @@
 const myLibrary = [];
+const bookCollection = document.querySelector(".book-collection");
 
 
 function Book(id,title, author, pages, readStatus) {
@@ -15,6 +16,15 @@ Book.prototype.bookInfo = function () {
 };
 
 
+function removeBookFromLibrary(bookId) {
+  for (let book of myLibrary) {
+    if (book.id === bookId) {
+      let index = myLibrary.indexOf(book);
+      myLibrary.splice(index, 1);
+    }
+  }
+}
+
 function addBookToLibrary(title, author, pages, readStatus) {
   // take params, create a book then store it in the array
   const id = crypto.randomUUID();
@@ -27,7 +37,6 @@ function addBookToLibrary(title, author, pages, readStatus) {
 }
 
 function displayLibrary(){
-  const bookCollection = document.querySelector(".book-collection");
 
   let lastItem = myLibrary[myLibrary.length - 1];
  
@@ -37,7 +46,6 @@ function displayLibrary(){
   var card = `
     <div class="book-card">
         <div class="title-wrapper">
-            <div class="hidden-id">${lastItem.id}</div>
             <h3>${lastItem.title}</h3>
             <div class="book-info">
                 <p>${lastItem.author}</p>
@@ -48,7 +56,7 @@ function displayLibrary(){
                   
                 <div class="button-section"> 
                     <button class="${lastItem.readStatus}-button">${lastItem.readStatus}</button>
-                    <button class="remove-button">Remove</button>
+                    <button class="remove-button" bookId="${lastItem.id}">Remove</button>
                 </div>
             </div>
         </div>
@@ -57,6 +65,32 @@ function displayLibrary(){
   bookCollection.insertAdjacentHTML('beforeend', card);
   
 }
+
+
+function additionalOptions() {
+  bookCollection.addEventListener("click", (event) => {
+    let button = event.target.closest("button");
+    if (!button) return;
+  
+    if (button.className === "remove-button") {
+      let bookId = button.getAttribute("bookID");
+      let card = button.closest(".book-card");
+      card.remove();
+    
+      removeBookFromLibrary(bookId);
+    } else if (button.className === "not-read-button") {
+      button.classList.remove("not-read-button");
+      button.textContent = "Read";
+      button.classList.add("read-button");
+    } else {
+      button.classList.remove("read-button");
+      button.textContent = "Not-Read";
+      button.classList.add("not-read-button");
+    }
+    
+  });
+}
+
 
 function fetchFormData() {
   const modalForm = document.querySelector("form");
@@ -76,6 +110,8 @@ function fetchFormData() {
   });
 }
 
+
+additionalOptions();
 fetchFormData();
 
 

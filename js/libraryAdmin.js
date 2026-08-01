@@ -2,123 +2,118 @@ const myLibrary = [];
 const bookCollection = document.querySelector(".book-collection");
 
 
-function Book(id,title, author, pages, readStatus) {
-  // the constructor...
+function Book(id,title, author, pages, readStatus, bookCover) {
+  
   this.id = id;
   this.title = title;
   this.author = author;
   this.pages = pages;
   this.readStatus = readStatus;
+  this.bookCover = bookCover;
 }
 
-Book.prototype.bookInfo = function () {
-  return `${this.title} ${this.author} ${this.pages} ${this.readStatus}`;
-};
 
 
-function removeBookFromLibrary(bookId) {
+function makeCard(id, title, author, pages, readStatus, bookCover) {
+  // I need to modify this section to make it more secure and avoid Cross-Site Scripting (XSS).
+  let card = `
+    <div class="book-card">
+        <div class="title-wrapper">
+            <h3>${title}</h3>
+            <div class="book-info">
+                <p>${author}</p>
+                <div class="book-cover-container">
+                    <img src="${bookCover}" alt="" class="book-cover">
+                </div>
+                <p>Pages: ${pages}</p>
+                  
+                <div class="button-section"> 
+                    <button class="${readStatus}-button" bookId="${id}">${readStatus}</button>
+                    <button class="remove-button" bookId="${id}">Remove</button>
+                </div>
+            </div>
+        </div>
+    </div>
+  `;
+  bookCollection.insertAdjacentHTML('beforeend', card);
+}
+
+function displayLibrary() {
+  bookCollection.replaceChildren();
   for (let book of myLibrary) {
-    if (book.id === bookId) {
-      let index = myLibrary.indexOf(book);
-      myLibrary.splice(index, 1);
+    
+    if (!book.bookCover) {
+      book.bookCover = "../assets/book-placeholder.png" 
     }
+    makeCard(book.id, book.title, book.author, book.pages, book.readStatus, book.bookCover);
   }
 }
 
-function addBookToLibrary(title, author, pages, readStatus) {
-  // take params, create a book then store it in the array
-  const id = crypto.randomUUID();
-  //console.log(id);
-  let bookItem = new Book(id, title, author, pages,readStatus);
-  //console.log(bookItem.bookInfo());
 
+
+function removeBookFromLibrary(bookId) {
+  bookCollection.replaceChildren();
+  let index = myLibrary.findIndex(book => book.id === bookId);
+  myLibrary.splice(index, 1);
+}
+
+function addBookToLibrary(title, author, pages, readStatus, bookCover) {
+  const id = crypto.randomUUID();
+  let bookItem = new Book(id, title, author, pages,readStatus,bookCover);
   myLibrary.push(bookItem);
   
 }
 
 
 function updateReadingStatus(status, bookId) {
-  for (let book of myLibrary) {
-    if (book.id === bookId) {
-      book.readStatus = status;
-      console.log("Status Updated In Library");
-    }
+  myLibrary.findIndex(book =>  {
+      if (book.id === bookId) {
+        book.readStatus = status;
+      }
+    });
+}
+
+
+
+
+
+function modifyButtonState(button) {
+  if (button.className === "not-read-button") {
+      button.classList.remove("not-read-button");
+      button.textContent = "Read";
+      button.classList.add("read-button");
+    
+  }else{
+      button.classList.remove("read-button");
+      button.textContent = "Not-Read";
+      button.classList.add("not-read-button");
   }
-
-  console.log(myLibrary);
-}
-
-function displayLibrary(){
-
-  let lastItem = myLibrary[myLibrary.length - 1];
- 
-  
-  // I need to modify this section to make it more secure and avoid Cross-Site Scripting (XSS).
-  
-  var card = `
-    <div class="book-card">
-        <div class="title-wrapper">
-            <h3>${lastItem.title}</h3>
-            <div class="book-info">
-                <p>${lastItem.author}</p>
-                <div class="book-cover-container">
-                    <img src="../assets/book-placeholder.png" alt="" class="book-cover">
-                </div>
-                <p>Pages: ${lastItem.pages}</p>
-                  
-                <div class="button-section"> 
-                    <button class="${lastItem.readStatus}-button" bookId="${lastItem.id}">${lastItem.readStatus}</button>
-                    <button class="remove-button" bookId="${lastItem.id}">Remove</button>
-                </div>
-            </div>
-        </div>
-    </div>
-  `;  
-  bookCollection.insertAdjacentHTML('beforeend', card);
   
 }
-
 
 function additionalOptions() {
   bookCollection.addEventListener("click", (event) => {
     let button = event.target.closest("button");
     if (!button) return;
 
-    let status;
     let bookId = button.getAttribute("bookID");
-    
-    
     if (button.className === "remove-button") {
-    
-      let card = button.closest(".book-card");
-      card.remove();
-      removeBookFromLibrary(bookId);
-      
-    } else if (button.className === "not-read-button") {
-      
-      button.classList.remove("not-read-button");
-      button.textContent = "Read";
-      button.classList.add("read-button");
-    } else {
-      
-      button.classList.remove("read-button");
-      button.textContent = "Not-Read";
-      button.classList.add("not-read-button");
+      removeBookFromLibrary(bookId); 
+    }else {
+      modifyButtonState(button);
     }
 
-    
-
-    status = button.textContent.toLowerCase();
-    console.log(bookId);
-
-    updateReadingStatus(status, bookId);
-    
+    updateReadingStatus(button.textContent.toLowerCase(), bookId);
+    displayLibrary();
   });
-}removeBookFromLibrary
+}
+
+
 
 
 function fetchFormData() {
   const modalForm = document.querySelector("form");
+  const file = document.querySelector("input[type='file']")
 
   modalForm.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -127,15 +122,33 @@ function fetchFormData() {
     const bookAuthor = data.get("bookAuthor");
     const bookPages = data.get("bookPages");
     const readStatus = data.get("readStatus");
+    let bookCover = data.get("bookCoverImg");
     
+    if (bookCover.size === 0) {
+      bookCover = undefined;
+    }
+    else {
+      bookCover = URL.createObjectURL(bookCover);
+    }
 
-    addBookToLibrary(bookTitle, bookAuthor, bookPages, readStatus);
+    file.value = "";
+
+    addBookToLibrary(bookTitle, bookAuthor, bookPages, readStatus, bookCover);
+    
     displayLibrary();
     
   });
 }
 
 
+addBookToLibrary("The Dunwich Horror", "H.P Lovecraft", 128, "not-read", "../assets/dunwich.jpg");
+
+addBookToLibrary("The Call Of Cthulhu", "H.P Lovecraft", 60, "read", "../assets/the_call.jpg");
+
+addBookToLibrary("The Hobbit", "J.R.R Tolkien", 600, "read", "../assets/the_hobbit.jpg");
+
+
+displayLibrary();
 additionalOptions();
 fetchFormData();
 

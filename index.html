@@ -17,62 +17,7 @@
             <h1>Personal Library</h1>
             <div class="book-section">
                 <h2> <img src="assets/bookmarks-outline-svgrepo-com.svg" alt=""class="icon" >My Book Collection:</h2>
-                <div class="book-collection">
-                    <div class="book-card">
-                        <div class="title-wrapper">
-                            <h3>The Dunwich Horror</h3>
-                            <div class="book-info">
-                                <p>Author: H.P Lovecraft</p>
-                                <div class="book-cover-container">
-                                    <img src="assets/dunwich.jpg" alt="" class="book-cover">
-                                </div>
-                                <p>Pages: 128</p>
-
-                                <div class="button-section">
-                                    <button class="not-read-button" bookId="1">Not read</button>
-                                    <button class="remove-button" bookId="1">Remove</button>
-                                </div>
-                            </div>
-                            
-                        </div>
-                        
-                    </div>
-                    <div class="book-card">
-                        <div class="title-wrapper">
-                            <h3>The Call Of Cthulhu</h3>
-                            <div class="book-info">
-                                <p>Author: H.P Lovecraft</p>
-                                <div class="book-cover-container">
-                                    <img src="assets/the_call.jpg" alt="" class="book-cover">
-                                </div>
-                                
-                                <p>Pages: 60</p>
-                                
-                                <div class="button-section">
-                                    <button class="read-button" bookId="2">Read</button>
-                                    <button class="remove-button" bookId="2">Remove</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="book-card">
-                        <div class="title-wrapper">
-                            <h3>The Hobbit</h3>
-                            <div class="book-info">
-                                <p>Author: J.R.R Tolkien</p>
-                                <div class="book-cover-container">
-                                    <img src="assets/the_hobbit.jpg" alt="" class="book-cover">
-                                </div>
-                                <p>Pages: 600</p>
-                                <div class="button-section">
-                                    <button class="read-button" bookId="3">Read</button>
-                                    <button class="remove-button" bookId="3">Remove</button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    </div>
-                </div>
+                <div class="book-collection"></div>
             </div>
 
             <button class="add-book glass-button" command="show-modal" commandfor="book-dialog">Add new Book!</button>
@@ -92,7 +37,7 @@
                             </div>
                             <div class="form-entry">
                                 <label for="book-pages">Pages:</label>
-                                <input type="tel" name="bookPages" id="book-pages" required>
+                                <input type="tel" name="bookPages" id="book-pages" pattern="^[0-9]+$"  title="Please enter a number" required>
                             </div>
 
                             <div>
@@ -105,8 +50,9 @@
                                 <label for="status">Not Read</label>
                             </div>
 
-                            <div class="drag-drop-container">
-                                <div class="drop-box">Drop Image Here</div>
+                            <div class="drag-drop-container upload-file">
+                                <label for="book-cover">Upload a Book Cover (Optional)</label>
+                                <input type="file" id="book-cover" name="bookCoverImg" accept="image/png/jpg">
                             </div>
                         </div>
                     </fieldset>

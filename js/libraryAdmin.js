@@ -119,7 +119,7 @@ function fetchFormData() {
       bookPages === "" ||
       readStatus === ""
     ) {
-      Alert("Some Data Is Missing");
+      alert("Some Data Is Missing");
       return;
     }
     

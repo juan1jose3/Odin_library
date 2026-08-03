@@ -18,7 +18,7 @@ function Book(id,title, author, pages, readStatus, bookCover) {
 function makeCard(id, title, author, pages, readStatus, bookCover) {
   let cover = bookCover;
   if (!bookCover) {
-    cover = "./assets/book-placeholder.png" 
+    cover = "/assets/book-placeholder.png" 
   }
 
   
@@ -143,11 +143,11 @@ function fetchFormData() {
 }
 
 
-addBookToLibrary("The Dunwich Horror", "H.P Lovecraft", 128, "not-read", "./assets/dunwich.jpg");
+addBookToLibrary("The Dunwich Horror", "H.P Lovecraft", 128, "not-read", "/assets/dunwich.jpg");
 
-addBookToLibrary("The Call Of Cthulhu", "H.P Lovecraft", 60, "read", "./assets/the_call.jpg");
+addBookToLibrary("The Call Of Cthulhu", "H.P Lovecraft", 60, "read", "/assets/the_call.jpg");
 
-addBookToLibrary("The Hobbit", "J.R.R Tolkien", 600, "read", "./assets/the_hobbit.jpg");
+addBookToLibrary("The Hobbit", "J.R.R Tolkien", 600, "read", "/assets/the_hobbit.jpg");
 
 
 displayLibrary();

@@ -20,6 +20,7 @@ function makeCard(id, title, author, pages, readStatus, bookCover) {
   if (!bookCover) {
     cover = "./assets/book-placeholder.png" 
   }
+
   
   let card = `
     <div class="book-card">

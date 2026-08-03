@@ -124,6 +124,7 @@ function fetchFormData() {
     }
     
     
+    
     if (bookCover.size === 0) {
       bookCover = undefined;
     }

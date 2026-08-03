@@ -1,3 +1,4 @@
+
 const myLibrary = [];
 const bookCollection = document.querySelector(".book-collection");
 
@@ -15,17 +16,21 @@ function Book(id,title, author, pages, readStatus, bookCover) {
 
 
 function makeCard(id, title, author, pages, readStatus, bookCover) {
-  // I need to modify this section to make it more secure and avoid Cross-Site Scripting (XSS).
+  let cover = bookCover;
+  if (!bookCover) {
+    cover = "../assets/book-placeholder.png" 
+  }
+  
   let card = `
     <div class="book-card">
         <div class="title-wrapper">
-            <h3>${title}</h3>
+            <h3>${DOMPurify.sanitize(title)}</h3>
             <div class="book-info">
-                <p>${author}</p>
+                <p>${DOMPurify.sanitize(author)}</p>
                 <div class="book-cover-container">
-                    <img src="${bookCover}" alt="" class="book-cover">
+                    <img src="${DOMPurify.sanitize(cover)}" alt="" class="book-cover">
                 </div>
-                <p>Pages: ${pages}</p>
+                <p>Pages: ${DOMPurify.sanitize(pages)}</p>
                   
                 <div class="button-section"> 
                     <button class="${readStatus}-button" bookId="${id}">${readStatus}</button>
@@ -41,18 +46,13 @@ function makeCard(id, title, author, pages, readStatus, bookCover) {
 function displayLibrary() {
   bookCollection.replaceChildren();
   for (let book of myLibrary) {
-    
-    if (!book.bookCover) {
-      book.bookCover = "../assets/book-placeholder.png" 
-    }
+  
     makeCard(book.id, book.title, book.author, book.pages, book.readStatus, book.bookCover);
   }
 }
 
 
-
 function removeBookFromLibrary(bookId) {
-  bookCollection.replaceChildren();
   let index = myLibrary.findIndex(book => book.id === bookId);
   myLibrary.splice(index, 1);
 }
@@ -65,45 +65,34 @@ function addBookToLibrary(title, author, pages, readStatus, bookCover) {
 }
 
 
-function updateReadingStatus(status, bookId) {
-  myLibrary.findIndex(book =>  {
-      if (book.id === bookId) {
-        book.readStatus = status;
-      }
-    });
-}
-
-
-
-
-
-function modifyButtonState(button) {
-  if (button.className === "not-read-button") {
-      button.classList.remove("not-read-button");
-      button.textContent = "Read";
-      button.classList.add("read-button");
-    
-  }else{
-      button.classList.remove("read-button");
-      button.textContent = "Not-Read";
-      button.classList.add("not-read-button");
-  }
+function updateReadingStatus(bookId) {
   
+  const object = myLibrary.find(book => book.id === bookId);
+
+  if (object.readStatus === "not-read") {
+    object.readStatus = "read";
+  } else {
+    object.readStatus = "not-read";
+  }
+  console.log(object.readStatus)
 }
+
 
 function additionalOptions() {
   bookCollection.addEventListener("click", (event) => {
+
     let button = event.target.closest("button");
     if (!button) return;
 
-    let bookId = button.getAttribute("bookID");
+    let bookId = button.getAttribute("bookId");
+    
     if (button.className === "remove-button") {
-      removeBookFromLibrary(bookId); 
+      removeBookFromLibrary(bookId);
+      
     }else {
-      modifyButtonState(button);
+      updateReadingStatus(bookId);
     }
 
-    updateReadingStatus(button.textContent.toLowerCase(), bookId);
     displayLibrary();
   });
 }
@@ -111,9 +100,10 @@ function additionalOptions() {
 
 
 
+
 function fetchFormData() {
   const modalForm = document.querySelector("form");
-  const file = document.querySelector("input[type='file']")
+  const file = document.querySelector("input[type='file']");
 
   modalForm.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -123,6 +113,16 @@ function fetchFormData() {
     const bookPages = data.get("bookPages");
     const readStatus = data.get("readStatus");
     let bookCover = data.get("bookCoverImg");
+
+    if (bookTitle === "" ||
+      bookAuthor === "" ||
+      bookPages === "" ||
+      readStatus === ""
+    ) {
+      Alert("Some Data Is Missing");
+      return;
+    }
+    
     
     if (bookCover.size === 0) {
       bookCover = undefined;

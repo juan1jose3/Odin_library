@@ -1,83 +1,82 @@
-
-const myLibrary = [];
 const bookCollection = document.querySelector(".book-collection");
 
-
-function Book(id,title, author, pages, readStatus, bookCover) {
-  
-  this.id = id;
-  this.title = title;
-  this.author = author;
-  this.pages = pages;
-  this.readStatus = readStatus;
-  this.bookCover = bookCover;
-}
-
-
-
-function makeCard(id, title, author, pages, readStatus, bookCover) {
-  let cover = bookCover;
-  if (!bookCover) {
-    cover = "./assets/book-placeholder.png" 
-  }
-
-  
-  let card = `
-    <div class="book-card">
-        <div class="title-wrapper">
-            <h3>${DOMPurify.sanitize(title)}</h3>
-            <div class="book-info">
-                <p>${DOMPurify.sanitize(author)}</p>
-                <div class="book-cover-container">
-                    <img src="${DOMPurify.sanitize(cover)}" alt="" class="book-cover">
-                </div>
-                <p>Pages: ${DOMPurify.sanitize(pages)}</p>
-                  
-                <div class="button-section"> 
-                    <button class="${readStatus}-button" bookId="${id}">${readStatus}</button>
-                    <button class="remove-button" bookId="${id}">Remove</button>
-                </div>
-            </div>
-        </div>
-    </div>
-  `;
-  bookCollection.insertAdjacentHTML('beforeend', card);
-}
-
-function displayLibrary() {
-  bookCollection.replaceChildren();
-  for (let book of myLibrary) {
-  
-    makeCard(book.id, book.title, book.author, book.pages, book.readStatus, book.bookCover);
+class Book{
+  constructor(id, title, author, pages, readStatus, bookCover){
+    this.id = id;
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
+    this.readStatus = readStatus;
+    this.bookCover = bookCover;
   }
 }
 
 
-function removeBookFromLibrary(bookId) {
-  let index = myLibrary.findIndex(book => book.id === bookId);
-  myLibrary.splice(index, 1);
-}
-
-function addBookToLibrary(title, author, pages, readStatus, bookCover) {
-  const id = crypto.randomUUID();
-  let bookItem = new Book(id, title, author, pages,readStatus,bookCover);
-  myLibrary.push(bookItem);
-  
-}
-
-
-function updateReadingStatus(bookId) {
-  
-  const object = myLibrary.find(book => book.id === bookId);
-
-  if (object.readStatus === "not-read") {
-    object.readStatus = "read";
-  } else {
-    object.readStatus = "not-read";
+class Library{
+  myLibrary;
+  constructor(){    
+    this.myLibrary = [];
   }
-  console.log(object.readStatus)
-}
+  
+  addBookToLibrary(title, author, pages, readStatus, bookCover) {
+    const id = crypto.randomUUID();
+    let bookItem = new Book(id,title,author,pages, readStatus,bookCover);
+    this.myLibrary.push(bookItem);
+  }
+  
+  removeBookFromLibrary(bookId) {
+    let index = this.myLibrary.findIndex(book => book.id === bookId);
+    myLibrary.splice(index, 1);
+  }
+  
+  updateReadingStatus(bookId) {
+    const object = this.myLibrary.find(book => book.id === bookId);
+  
+    if (object.readStatus === "not-read") {
+      object.readStatus = "read";
+    } else {
+      object.readStatus = "not-read";
+    }
+    console.log(object.readStatus)
+  }
 
+
+  makeCard(id,title,author,pages,readStatus,bookCover) {
+    if (!bookCover) {
+      bookCover = "./assets/book-placeholder.png" 
+    }  
+    let card = `
+      <div class="book-card">
+          <div class="title-wrapper">
+              <h3>${DOMPurify.sanitize(title)}</h3>
+              <div class="book-info">
+                  <p>${DOMPurify.sanitize(author)}</p>
+                  <div class="book-cover-container">
+                      <img src="${DOMPurify.sanitize(bookCover)}" alt="" class="book-cover">
+                  </div>
+                  <p>Pages: ${DOMPurify.sanitize(pages)}</p>
+                    
+                  <div class="button-section"> 
+                      <button class="${readStatus}-button" bookId="${id}">${readStatus}</button>
+                      <button class="remove-button" bookId="${id}">Remove</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+    `;
+    bookCollection.insertAdjacentHTML('beforeend', card);
+  }
+  
+  displayLibrary() {
+    bookCollection.replaceChildren();
+    for (let book of this.myLibrary) {
+  
+      console.log(book.id, book.title, book.author, book.pages, book.readStatus, book.bookCover);
+
+      this.makeCard(book.id, book.title, book.author, book.pages, book.readStatus, book.bookCover);
+    }
+  }
+}
 
 function additionalOptions() {
   bookCollection.addEventListener("click", (event) => {
@@ -98,11 +97,7 @@ function additionalOptions() {
   });
 }
 
-
-
-
-
-function fetchFormData() {
+function fetchFormData(library) {
   const modalForm = document.querySelector("form");
   const file = document.querySelector("input[type='file']");
 
@@ -135,25 +130,26 @@ function fetchFormData() {
 
     file.value = "";
 
-    addBookToLibrary(bookTitle, bookAuthor, bookPages, readStatus, bookCover);
+    library.addBookToLibrary(bookTitle, bookAuthor, bookPages, readStatus, bookCover);
     
-    displayLibrary();
+    library.displayLibrary();
     
   });
 }
 
 
-addBookToLibrary("The Dunwich Horror", "H.P Lovecraft", 128, "not-read", "./assets/dunwich.jpg");
+const library = new Library();
+library.addBookToLibrary("The Dunwich Horror", "H.P Lovecraft", 128, "not-read", "./assets/dunwich.jpg");
 
-addBookToLibrary("The Call Of Cthulhu", "H.P Lovecraft", 60, "read", "./assets/the_call.jpg");
+library.addBookToLibrary("The Call Of Cthulhu", "H.P Lovecraft", 60, "read", "./assets/the_call.jpg");
 
-addBookToLibrary("The Hobbit", "J.R.R Tolkien", 600, "read", "./assets/the_hobbit.jpg");
+library.addBookToLibrary("The Hobbit", "J.R.R Tolkien", 600, "read", "./assets/the_hobbit.jpg");
 
 
 
-displayLibrary();
+library.displayLibrary();
 additionalOptions();
-fetchFormData();
+fetchFormData(library);
 
 
 

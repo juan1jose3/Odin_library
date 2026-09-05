@@ -26,7 +26,7 @@ class Library{
   
   removeBookFromLibrary(bookId) {
     let index = this.myLibrary.findIndex(book => book.id === bookId);
-    myLibrary.splice(index, 1);
+    this.myLibrary.splice(index, 1);
   }
   
   updateReadingStatus(bookId) {
@@ -37,7 +37,7 @@ class Library{
     } else {
       object.readStatus = "not-read";
     }
-    console.log(object.readStatus)
+    //console.log(object.readStatus);
   }
 
 
@@ -70,15 +70,12 @@ class Library{
   displayLibrary() {
     bookCollection.replaceChildren();
     for (let book of this.myLibrary) {
-  
-      console.log(book.id, book.title, book.author, book.pages, book.readStatus, book.bookCover);
-
       this.makeCard(book.id, book.title, book.author, book.pages, book.readStatus, book.bookCover);
     }
   }
 }
 
-function additionalOptions() {
+function additionalOptions(library) {
   bookCollection.addEventListener("click", (event) => {
 
     let button = event.target.closest("button");
@@ -87,13 +84,13 @@ function additionalOptions() {
     let bookId = button.getAttribute("bookId");
     
     if (button.className === "remove-button") {
-      removeBookFromLibrary(bookId);
+      library.removeBookFromLibrary(bookId);
       
     }else {
-      updateReadingStatus(bookId);
+      library.updateReadingStatus(bookId);
     }
 
-    displayLibrary();
+    library.displayLibrary();
   });
 }
 
@@ -119,8 +116,7 @@ function fetchFormData(library) {
       return;
     }
     
-    
-    
+
     if (bookCover.size === 0) {
       bookCover = undefined;
     }
@@ -148,7 +144,7 @@ library.addBookToLibrary("The Hobbit", "J.R.R Tolkien", 600, "read", "./assets/t
 
 
 library.displayLibrary();
-additionalOptions();
+additionalOptions(library);
 
 fetchFormData(library);
 
